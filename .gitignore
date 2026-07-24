@@ -1,0 +1,16 @@
+# Create the .gitignore file directly from the terminal
+cat > .gitignore << 'EOF'
+# Python bytecode cache; regenerated automatically, never needed in version control
+__pycache__/
+*.pyc
+
+# VS Code editor settings
+.vscode/
+
+# Runtime output created by organizer.sh during testing
+archive/
+organizer.log
+
+# OS-generated junk files
+.DS_Store
+EOF
