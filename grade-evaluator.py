@@ -80,7 +80,22 @@ def evaluate_grades(data):
         return
 
     
-    # TODO: c) Calculate the Final Grade and GPA
+    # --- c) GPA Calculation ---
+    # Each category's percentage score is a WEIGHTED average:
+    # sum(score * weight) for that group, divided by that group's total weight.
+    formative_pct = sum(row['score'] * row['weight'] for row in formatives) / formative_weight
+    summative_pct = sum(row['score'] * row['weight'] for row in summatives) / summative_weight
+
+    # The overall total grade is the weighted average across ALL assignments
+    total_grade = sum(row['score'] * row['weight'] for row in data) / total_weight
+    gpa = (total_grade / 100) * 5.0
+
+    print(f"Formative average: {formative_pct:.2f}%")
+    print(f"Summative average: {summative_pct:.2f}%")
+    print(f"Total grade: {total_grade:.2f}%")
+    print(f"GPA: {gpa:.3f}")
+
+    
     # TODO: d) Determine Pass/Fail status (>= 50% in BOTH categories)
     # TODO: e) Check for failed formative assignments (< 50%)
     #          and determine which one(s) have the highest weight for resubmission.
