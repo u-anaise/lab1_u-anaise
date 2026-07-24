@@ -45,6 +45,7 @@ def evaluate_grades(data):
         print("No assignment data found. The grades file appears to be empty.")
         return
 
+
     # --- a) Grade Validation: every score must be within 0–100 ---
     # We collect ALL invalid rows first (instead of stopping at the first one)
     # so the user gets one complete error report rather than fixing issues one at a time.
@@ -54,7 +55,31 @@ def evaluate_grades(data):
         for row in invalid_scores:
             print(f"  - {row['assignment']}: {row['score']}")
         return  # Stop here; there's no sensible GPA to calculate with bad data
-    # TODO: b) Validate total weights (Total=100, Summative=40, Formative=60)
+
+
+    # --- b) Weight Validation ---
+    # Split the assignments into their two groups so we can check each group's
+    # total weight separately, as well as the grand total.
+    formatives = [row for row in data if row['group'] == 'Formative']
+    summatives = [row for row in data if row['group'] == 'Summative']
+
+    total_weight = sum(row['weight'] for row in data)
+    formative_weight = sum(row['weight'] for row in formatives)
+    summative_weight = sum(row['weight'] for row in summatives)
+
+    # Use a tiny tolerance (0.01) instead of exact equality, since floating-point
+    # addition can produce results like 99.99999999999999 instead of a clean 100.0
+    if abs(total_weight - 100) > 0.01:
+        print(f"Error: Total weights must sum to 100, but they sum to {total_weight}.")
+        return
+    if abs(formative_weight - 60) > 0.01:
+        print(f"Error: Formative weights must sum to 60, but they sum to {formative_weight}.")
+        return
+    if abs(summative_weight - 40) > 0.01:
+        print(f"Error: Summative weights must sum to 40, but they sum to {summative_weight}.")
+        return
+
+    
     # TODO: c) Calculate the Final Grade and GPA
     # TODO: d) Determine Pass/Fail status (>= 50% in BOTH categories)
     # TODO: e) Check for failed formative assignments (< 50%)
