@@ -121,7 +121,10 @@ def evaluate_grades(data):
         ]
 
         
-        
+        print("Eligible for resubmission (highest-weight failed formative(s)):")
+        for name in resubmission_candidates:
+            print(f"  - {name}")
+
     
     pass
 
