@@ -1,5 +1,3 @@
-# Create the .gitignore file directly from the terminal
-cat > .gitignore << 'EOF'
 # Python bytecode cache; regenerated automatically, never needed in version control
 __pycache__/
 *.pyc
@@ -13,4 +11,6 @@ organizer.log
 
 # OS-generated junk files
 .DS_Store
-EOF
+
+# Windows metadata tag added to files downloaded via WSL/Windows interop
+*:Zone.Identifier
