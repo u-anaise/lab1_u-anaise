@@ -125,8 +125,6 @@ def evaluate_grades(data):
         for name in resubmission_candidates:
             print(f"  - {name}")
 
-    
-    pass
 
 if __name__ == "__main__":
     # 1. Load the data
