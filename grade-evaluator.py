@@ -38,7 +38,22 @@ def evaluate_grades(data):
     """
     print("\n--- Processing Grades ---")
     
-    # TODO: a) Check if all scores are percentage based (0-100)
+    # --- Edge case: empty CSV (this happens right after organizer.sh resets grades.csv) ---
+    # If there's no data at all, none of the logic below is meaningful, so we
+    # print a clear message and stop, instead of crashing on a ZeroDivisionError later.
+    if not data:
+        print("No assignment data found. The grades file appears to be empty.")
+        return
+
+    # --- a) Grade Validation: every score must be within 0–100 ---
+    # We collect ALL invalid rows first (instead of stopping at the first one)
+    # so the user gets one complete error report rather than fixing issues one at a time.
+    invalid_scores = [row for row in data if not (0 <= row['score'] <= 100)]
+    if invalid_scores:
+        print("Error: The following assignments have scores outside the valid 0-100 range:")
+        for row in invalid_scores:
+            print(f"  - {row['assignment']}: {row['score']}")
+        return  # Stop here; there's no sensible GPA to calculate with bad data
     # TODO: b) Validate total weights (Total=100, Summative=40, Formative=60)
     # TODO: c) Calculate the Final Grade and GPA
     # TODO: d) Determine Pass/Fail status (>= 50% in BOTH categories)
