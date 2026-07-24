@@ -101,10 +101,27 @@ def evaluate_grades(data):
     status = "PASSED" if passed else "FAILED"
     print(f"Status: {status}")
 
-    
-    # TODO: e) Check for failed formative assignments (< 50%)
-    #          and determine which one(s) have the highest weight for resubmission.
-    # TODO: f) Print the final decision (PASSED / FAILED) and resubmission options
+
+    # --- e) Resubmission Logic ---
+    # Only FORMATIVE assignments below 50% are eligible.
+    failed_formatives = [row for row in formatives if row['score'] < 50]
+
+    if not failed_formatives:
+        print("No formative resubmissions needed.")
+    else:
+        # Find the highest weight among the FAILED formatives specifically
+        # (not the highest weight overall — a passed assignment doesn't need resubmission
+        # even if it happens to carry more weight).
+        highest_weight = max(row['weight'] for row in failed_formatives)
+
+        # Collect every failed formative that shares that highest weight — this
+        # handles ties, as the spec requires (show ALL of them, not just one).
+        resubmission_candidates = [
+            row['assignment'] for row in failed_formatives if row['weight'] == highest_weight
+        ]
+
+        
+        
     
     pass
 
