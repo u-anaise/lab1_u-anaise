@@ -23,8 +23,7 @@ The script will:
 - Calculate the weighted Formative average, Summative average, total grade, and GPA
   (`GPA = (Total Grade / 100) * 5.0`)
 - Print PASSED or FAILED (requires ≥50% in **both** categories)
-- List any failed Formative assignment(s) eligible for resubmission — the failed
-  Formative(s) with the highest weight (ties are all listed)
+- List any failed Formative assignment(s) eligible for resubmission i.e. the failed Formative(s) with the highest weight (ties are all listed)
 
 If the CSV file doesn't exist, or is empty, or contains invalid scores/weights, the
 script prints a clear error message instead of crashing.
