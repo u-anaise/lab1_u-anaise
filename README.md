@@ -10,9 +10,9 @@ This project has two parts:
 
 ## How to run the Python script
 
-\`\`\`bash
+```bash
 python3 grade-evaluator.py
-\`\`\`
+```
 
 When prompted, enter the CSV filename to process (e.g. `grades.csv`).
 
@@ -30,10 +30,10 @@ script prints a clear error message instead of crashing.
 
 ## How to run the shell script
 
-\`\`\`bash
+```bash
 chmod +x organizer.sh
 ./organizer.sh
-\`\`\`
+```
 
 - Create an `archive/` directory if one doesn't already exist
 - Rename the current `grades.csv` by appending a timestamp (e.g. `grades_20260724-225317.csv`)
