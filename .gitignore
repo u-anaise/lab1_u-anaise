@@ -1,15 +1,12 @@
-# Python bytecode cache; regenerated automatically, never needed in version control
 __pycache__/
 *.pyc
 
-# VS Code editor settings
 .vscode/
 
 # Runtime output created by organizer.sh during testing
 archive/
 organizer.log
 
-# OS-generated junk files
 .DS_Store
 
 # Windows metadata tag added to files downloaded via WSL/Windows interop
