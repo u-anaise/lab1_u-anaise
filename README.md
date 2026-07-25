@@ -8,11 +8,25 @@ This project has two parts:
 2. `organizer.sh`: a Bash script that archives the current `grades.csv` with a timestamp,
    resets the workspace with a fresh empty CSV, and logs the action.
 
+## Project Structure
+
+```
+lab1_u-anaise/
+├── .gitignore
+├── Readme.md
+├── grade-evaluator.py
+├── organizer.sh
+└── grades.csv
+```
+
+Note: `archive/` and `organizer.log` are not tracked in version control — they're
+created automatically the first time you run `organizer.sh`.   
+
 ## How to run the Python script
 
-\`\`\`bash
+```bash
 python3 grade-evaluator.py
-\`\`\`
+```
 
 When prompted, enter the CSV filename to process (e.g. `grades.csv`).
 
@@ -30,10 +44,10 @@ script prints a clear error message instead of crashing.
 
 ## How to run the shell script
 
-\`\`\`bash
+```bash
 chmod +x organizer.sh
 ./organizer.sh
-\`\`\`
+```
 
 - Create an `archive/` directory if one doesn't already exist
 - Rename the current `grades.csv` by appending a timestamp (e.g. `grades_20260724-225317.csv`)
