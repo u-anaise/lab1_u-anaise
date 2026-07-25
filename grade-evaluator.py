@@ -38,28 +38,22 @@ def evaluate_grades(data):
     """
     print("\n--- Processing Grades ---")
     
-    # --- Edge case: empty CSV (this happens right after organizer.sh resets grades.csv) ---
-    # If there's no data at all, none of the logic below is meaningful, so we
-    # print a clear message and stop, instead of crashing on a ZeroDivisionError later.
+    # Edge case: empty CSV 
     if not data:
         print("No assignment data found. The grades file appears to be empty.")
         return
 
 
-    # --- a) Grade Validation: every score must be within 0–100 ---
-    # We collect ALL invalid rows first (instead of stopping at the first one)
-    # so the user gets one complete error report rather than fixing issues one at a time.
+    # a) Grade Validation: every score must be within 0–100
     invalid_scores = [row for row in data if not (0 <= row['score'] <= 100)]
     if invalid_scores:
         print("Error: The following assignments have scores outside the valid 0-100 range:")
         for row in invalid_scores:
             print(f"  - {row['assignment']}: {row['score']}")
-        return  # Stop here; there's no sensible GPA to calculate with bad data
+        return  
 
 
-    # --- b) Weight Validation ---
-    # Split the assignments into their two groups so we can check each group's
-    # total weight separately, as well as the grand total.
+    # b) Weight Validation
     formatives = [row for row in data if row['group'] == 'Formative']
     summatives = [row for row in data if row['group'] == 'Summative']
 
@@ -67,8 +61,8 @@ def evaluate_grades(data):
     formative_weight = sum(row['weight'] for row in formatives)
     summative_weight = sum(row['weight'] for row in summatives)
 
-    # Use a tiny tolerance (0.01) instead of exact equality, since floating-point
-    # addition can produce results like 99.99999999999999 instead of a clean 100.0
+    # Tolerance of 0.01 instead of exact equality: floating-point addition can
+    # produce results like 99.99999999999999 instead of a clean 100.0
     if abs(total_weight - 100) > 0.01:
         print(f"Error: Total weights must sum to 100, but they sum to {total_weight}.")
         return
@@ -80,13 +74,10 @@ def evaluate_grades(data):
         return
 
     
-    # --- c) GPA Calculation ---
-    # Each category's percentage score is a WEIGHTED average:
-    # sum(score * weight) for that group, divided by that group's total weight.
+    # c) GPA Calculation
     formative_pct = sum(row['score'] * row['weight'] for row in formatives) / formative_weight
     summative_pct = sum(row['score'] * row['weight'] for row in summatives) / summative_weight
 
-    # The overall total grade is the weighted average across ALL assignments
     total_grade = sum(row['score'] * row['weight'] for row in data) / total_weight
     gpa = (total_grade / 100) * 5.0
 
@@ -96,30 +87,24 @@ def evaluate_grades(data):
     print(f"GPA: {gpa:.3f}")
 
     
-    # --- d) Final Decision: must be >=50% in BOTH categories, not just the overall total ---
+    # d) Final Decision: must be >=50% in BOTH categories, not just the overall total
     passed = formative_pct >= 50 and summative_pct >= 50
     status = "PASSED" if passed else "FAILED"
     print(f"Status: {status}")
 
 
-    # --- e) Resubmission Logic ---
-    # Only FORMATIVE assignments below 50% are eligible.
+    # e) Resubmission Logic: only FORMATIVE assignments below 50% are eligible.
     failed_formatives = [row for row in formatives if row['score'] < 50]
 
     if not failed_formatives:
         print("No formative resubmissions needed.")
     else:
-        # Find the highest weight among the FAILED formatives specifically
-        # (not the highest weight overall — a passed assignment doesn't need resubmission
-        # even if it happens to carry more weight).
+        # Weight is compared only among the failed ones: a formative that passed is never up for resubmission, no matter its weight.
+        # If two or more failed assignments tie for the highest weight, all of them are listed.
         highest_weight = max(row['weight'] for row in failed_formatives)
-
-        # Collect every failed formative that shares that highest weight — this
-        # handles ties, as the spec requires (show ALL of them, not just one).
         resubmission_candidates = [
             row['assignment'] for row in failed_formatives if row['weight'] == highest_weight
         ]
-
         
         print("Eligible for resubmission (highest-weight failed formative(s)):")
         for name in resubmission_candidates:
