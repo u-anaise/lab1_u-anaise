@@ -8,6 +8,20 @@ This project has two parts:
 2. `organizer.sh`: a Bash script that archives the current `grades.csv` with a timestamp,
    resets the workspace with a fresh empty CSV, and logs the action.
 
+## Project Structure
+
+```
+lab1_u-anaise/
+├── .gitignore
+├── Readme.md
+├── grade-evaluator.py
+├── organizer.sh
+└── grades.csv
+```
+
+Note: `archive/` and `organizer.log` are not tracked in version control — they're
+created automatically the first time you run `organizer.sh`.   
+
 ## How to run the Python script
 
 ```bash
